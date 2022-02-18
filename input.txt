@@ -1,0 +1,82 @@
+1
+
+Introduction to computer organization, high-level, assembly, and machine languages. Classes of computers, components of a computer system, technology improvements, chip manufacturing process, programmer's view of a computer system.
+
+2
+
+Introduction to assembly language programming, instructions, registers, assembly language statements, directives, text, data, and stack segments. Defining data, arrays, and strings. Memory alignment, byte ordering, and symbol table. System calls, console input and output.
+
+3
+
+MIPS instruction set architecture, instruction formats, R-type integer arithmetic, logic, and shift instructions, immediate operands, I-type arithmetic and logic instructions, pseudo-instructions.
+
+4
+
+Control flow, branch and jump instructions, translating if-else statements and logical expressions, compare instructions, and conditional-move instructions.
+
+Arrays, allocating arrays statically in the data segment and dynamically on the heap, computing the memory addresses of array elements.
+
+5
+
+Load and store instructions, translating loops, using pointers to traverse arrays, addressing modes, jump and branch limits.
+
+Defining functions (procedures) in MIPS assembly language, function call and return. Passing arguments.
+
+6
+
+The stack segment, allocating and freeing stack frames, leaf versus non-leaf functions, preserving registers across function calls.
+
+Sort function example and its translation into assembly code. Translating recursive functions into assembly code.
+
+7
+
+Integer multiplication, unsigned and signed multiplication, integer multiplication and division in MIPS.
+
+8
+
+Floating point representation, IEEE 754 standard, normalized and de-normalized numbers, zero, infinity, NaN, FP comparison, FP addition, FP multiplication, rounding and accurate arithmetic.
+
+9
+
+MIPS Floating-point instructions: load/store, arithmetic, data movement, convert, compare, branch, FP system calls.
+
+Floating-point programs, example on matrix multiplication.
+
+Designing a processor, register transfer level, datapath components, clocking methodology.
+
+10
+
+Implementing a register file and multifunction ALU.
+
+Assembling a single-cycle datapath.
+
+Control signals, analyzing the execution of each instruction.
+
+Control unit, ALU control, and PC control.
+
+11
+
+CPU performance and metrics, average CPI of a multi-cycle processor, performance equation, MIPS as a metric, Amdahlâ€™s law, energy and power consumption, benchmarks.
+
+12
+
+Drawback of single-cycle processor, single-cycle versus multi-cycle instruction execution, performance comparison.
+
+Pipelining versus serial instruction execution, pipeline performance.
+
+MIPS 5-stage pipeline, pipelined datapath, pipelined control.
+
+13
+
+Pipeline hazards: structural, data, and control hazards, load delay, hazard detection, stall and forwarding unit, delayed branching, and branch prediction.
+
+14
+
+Main memory organization and performance, SRAM, DRAM, latency and bandwidth, memory hierarchy, cache memory, locality of reference.
+
+Cache memory organization: direct-mapped, fully-associative, and set-associative caches, handling cache miss, write policy, and replacement policy.
+
+15
+
+Cache performance, memory stall cycles, and average memory access time.
+Review.
