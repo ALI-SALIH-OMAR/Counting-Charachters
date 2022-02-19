@@ -155,6 +155,7 @@
 		syscall
 	Null:
         	li $t7, 1
+		j Print
 	Terminate:
 		li $v0 , 10
 		syscall
