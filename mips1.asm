@@ -62,9 +62,7 @@
         
         beqz $t1,Null
         
-        Null:
-        	li $t7, 1
-        	j Print
+        
          
 	loop:
 		lbu  $t0,($t2)
@@ -155,7 +153,8 @@
 		li $v0 , 1           
 		move $a0 , $t8
 		syscall
-		
+	Null:
+        	li $t7, 1
 	Terminate:
 		li $v0 , 10
 		syscall
