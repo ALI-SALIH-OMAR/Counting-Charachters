@@ -14,20 +14,20 @@
 .text
 
 	# open file to read only           
+	li $v0 , 13
 	la $a0 , Input_File
 	li $a1 , 0
-	li $v0 , 13
 	syscall 
 	
 	# does the file exist in the provided directory? 
 	bgez $v0, Exist
 	
+	li $v0 , 13
 	la $a0 , InputFile
 	li $a1 , 0
-	li $v0 , 13
 	syscall
 	
-	# dose the file exist in Mars Folder?
+	# does the file exist in Mars Folder?
 	bgez $v0, Exist
 	
 	# File Not Found situation then Print Error Message and terminate
@@ -35,6 +35,7 @@
 	la $a0 , Error_Message
 	syscall 
 	j Terminate
+	
 	Exist:
 		# read from the file
 		move $a0,$v0         
@@ -44,88 +45,85 @@
 		syscall 
 
 	# store the number of characters read from the file
-	move $s1,$v0
+	move $t1,$v0
  
 	#close file reading function
 	li $v0 , 16  
 	syscall 
 
 	# count number of Letters, Digits, Other Special Characters and Lines
-	la $t1, Array           # initialize the array address
-	li $t2, 0               # counter
-	li $s2, 0               # number of Letters
-	li $s3, 0               # number of Digits
-	li $s4, 0               # number of Other Special Characters 
-	li $s5, 0               # number of Lines
-	li $k1, 0               # $k0 will be one if the last element was Letter
-                        	# $k1 will be one if the current element was Letter
-                        	# if ($k0 > $k1) word++  
-        beq $t2, $s1, Terminate
+	la $t2, Array           # initialize the array address
+	li $t3, 0               # counter
+	li $t4, 0		# Outside Ascii Checker
+	li $t5, 0               # number of Letters
+	li $t6, 0               # number of Digits
+	li $t7, 0               # number of Other Special Characters 
+	li $t8, 0               # number of Lines
         
 	loop:
-		move $k0,$k1
-		li $k1, 0
-		lbu  $s0,($t1)
-		ble $s0,9,Other
-		bgeu $s0,11,Digit
-		addiu $s5,$s5,1
-		li $k1,1  
-		j Line_Checking
+		lbu  $t0,($t2)
+		
+		# if (Ascii charachter <= 9) Go to Other Condtion;
+		# Since What is less or equal to 9 in Ascii is a specail charachter
+		ble $t0,9,Other
+		
+		# if (Ascii charachter >= 11) Go to Digit Condtion;
+		# Since What is Greater or equal to 11 in Ascii is not a new line
+		bgeu $t0,11,Digit
+		
+		# Then what is left will be (Ascii charachter==10 which is a "\n" in Ascii
+		addiu $t8,$t8,1
+		j Cursor
+		
 		Digit:
 		# if (Ascii charachter <= 47) Go to Other Condtion;
 		# Since What is less or equal to 47 in Ascii is a specail charachter
-		bleu $s0,47,Other     
+		bleu $t0,47,Other     
+		
 		# if (Ascii charachter <= 47) Go to Capital_Letter_Checking Condtion;
 		# Since What is Greater or equal to 58 in Ascii is not a Digit      
-		bgeu $s0,58,Capital_Letter_Checking
+		bgeu $t0,58,Capital_Letter_Checking
+		
 		# Then what is left will be (Ascii charachter>47 && Ascii charachter<58) which is a digit in Ascii
-		addiu $s3,$s3,1 
-		li $k1,1   
-		j Line_Checking
+		addiu $t6,$t6,1 
+		j Cursor
 
 		Capital_Letter_Checking:            # Capital Letters
 	
-			bleu $s0,64,Other         
-			bgeu $s0,91,Small_Letter_Checking
-			addiu $s2,$s2,1 
-			li $k1,1 
-			j Line_Checking
+			bleu $t0,64,Other         
+			bgeu $t0,91,Small_Letter_Checking
+			addiu $t5,$t5,1 
+			j Cursor
 
 		Small_Letter_Checking:            # Small Letters
-			bleu $s0,96,Other        
-			bgeu $s0,123,Other 
-			addiu $s2,$s2,1  
-			li $k1,1 
-			j Line_Checking
+			bleu $t0,96,Other        
+			bgeu $t0,123,Other 
+			addiu $t5,$t5,1  
+			j Cursor
 
 		Other:                 # other characters
-			addiu $s4,$s4,1
-		Line_Checking:
-			bleu $k0,$k1,no        # is it a word ?	
-			no:
-				addiu $t1,$t1,1         # +1 to the address 
-				addiu $t2,$t2,1         # +1 to the counter
+			bgtu $t0,127,E_ASCII
+			addiu $t7,$t7,1
+		E_ASCII:
+			li $t4,1
+		Cursor:
+				addiu $t2,$t2,1         # +1 to the address 
+				addiu $t3,$t3,1         # +1 to the counter
 				#if (countter != size of file ) then continue the loop
-				bleu  $t2,$s1,loop
+				bne  $t3,$t1,loop
 
-	move $k0,$k1          # to check if the last thing in the file is word
-	li $k1, 0
-	add $t5,$s2,$s3
-	add $t5,$s4,$t5
-	add $t5,$s5,$t5
-	bleu $k0,$k1,Print       
-	
+
+	beqz $t4,Print
+	addiu $t7,$t7,2
 	Print:
 	#display the info of the file in Counting Characters
-		li $v0 , 1           
-		move $a0 , $t5
-		syscall
+		
 		#display the Number of Letters counted
 		li $v0 , 4           
 		la $a0 , Letters
 		syscall
 		li $v0 , 1           
-		move $a0 , $s2
+		move $a0 , $t5
 		syscall
 		
 	 	#display the Number of Digits counted
@@ -133,7 +131,7 @@
 		la $a0 , Digits
 		syscall
 		li $v0 , 1           
-		move $a0 , $s3
+		move $a0 , $t6
 		syscall
 		
 		#display the Number of Other Special Characters counted
@@ -141,7 +139,7 @@
 		la $a0 , Special
 		syscall
 		li $v0 , 1           
-		move $a0 , $s4
+		move $a0 , $t7
 		syscall
 		
 		#display the Number of new Lines added
@@ -149,10 +147,9 @@
 		la $a0 , Lines
 		syscall
 		li $v0 , 1           
-		move $a0 , $s5
+		move $a0 , $t8
 		syscall
-		j Terminate
 		
 	Terminate:
-	li $v0 , 10
-	syscall
+		li $v0 , 10
+		syscall
