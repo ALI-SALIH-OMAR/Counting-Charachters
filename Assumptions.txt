@@ -1,0 +1,40 @@
+Assumptions:
+
+1- Use of double back slash "\\" instead of one, so it can read from the required directory.
+However, there is a case where if not found it will assume it is in the same MIPS jar File.
+This will provide compatibility For the User to Enter his desired directory.
+
+2- In this File we treated the Null as a Special character since there were no instructions about not considering it, if needed not to you can remove the following instruction
+ 
+beqz $t1,Null
+        
+        Null:
+        	li $t7, 1
+        	j Print
+
+and add instead:
+
+ beqz $t1,Terminate	
+
+and add after Other:
+
+ beqz $t1,Cursor
+
+3- In this File we treated also return carriage as a Special character since there were no instructions about not considering it, if needed not to you can add the following instruction after
+Other:
+
+beq $t1,13,Cursor
+
+4- In this File we treated the lines to the meaning of a new line only Not the number of lines in a file since there were no instructions about considering it since the required was "\n" which start existing from the second line, if needed to you can add the following instruction before beqz $t4,Print which is:
+
+addiu $t8,$t8,1	
+
+5- In this File we treated the characters outside ascii to be treated as two Special character since there in the given Sample file a character Outside ASCII which Exist in the Extended-ASCII which in a way will break the code then we treated each character greater than 127 bits as two Special character, if needed not to you can remove the following instruction:
+
+E_ASCII:
+			li $t4,1
+
+and 
+
+beqz $t4,Print
+	addiu $t7,$t7,2	
