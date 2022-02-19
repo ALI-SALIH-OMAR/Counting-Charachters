@@ -60,6 +60,12 @@
 	li $t7, 0               # number of Other Special Characters 
 	li $t8, 0               # number of Lines
         
+        beqz $t1,Null
+        
+        Null:
+        	li $t7, 1
+        	j Print
+         
 	loop:
 		lbu  $t0,($t2)
 		
