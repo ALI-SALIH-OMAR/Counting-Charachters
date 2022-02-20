@@ -14,20 +14,20 @@
 .text
 
 	# open file to read only           
-	li $v0 , 13
 	la $a0 , Input_File
 	li $a1 , 0
+	li $v0 , 13
 	syscall 
 	
 	# does the file exist in the provided directory? 
 	bgez $v0, Exist
 	
-	li $v0 , 13
 	la $a0 , InputFile
 	li $a1 , 0
+	li $v0 , 13
 	syscall
 	
-	# does the file exist in Mars Folder?
+	# dose the file exist in Mars Folder?
 	bgez $v0, Exist
 	
 	# File Not Found situation then Print Error Message and terminate
@@ -35,7 +35,6 @@
 	la $a0 , Error_Message
 	syscall 
 	j Terminate
-	
 	Exist:
 		# read from the file
 		move $a0,$v0         
@@ -52,6 +51,8 @@
 	syscall 
 
 	# count number of Letters, Digits, Other Special Characters and Lines
+	
+	# count number of Letters, Digits, Other Special Characters and Lines
 	la $t2, Array           # initialize the array address
 	li $t3, 0               # counter
 	li $t4, 0		# Outside Ascii Checker
@@ -60,10 +61,8 @@
 	li $t7, 0               # number of Other Special Characters 
 	li $t8, 0               # number of Lines
         
-        beqz $t1,Null
         
-        
-         
+    
 	loop:
 		lbu  $t0,($t2)
 		
@@ -114,7 +113,7 @@
 				addiu $t2,$t2,1         # +1 to the address 
 				addiu $t3,$t3,1         # +1 to the counter
 				#if (countter != size of file ) then continue the loop
-				bne  $t3,$t1,loop
+				bleu  $t3,$t1,loop
 
 
 	beqz $t4,Print
@@ -153,9 +152,7 @@
 		li $v0 , 1           
 		move $a0 , $t8
 		syscall
-	Null:
-        	li $t7, 1
-		j Print
 	Terminate:
 		li $v0 , 10
 		syscall
+	
